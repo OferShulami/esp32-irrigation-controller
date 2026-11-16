@@ -1,0 +1,29 @@
+name: Build firmware
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: arduino/setup-arduino-cli@v2
+
+      - name: Install ESP32 core
+        run: |
+          arduino-cli config init
+          arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core update-index
+          arduino-cli core install esp32:esp32
+
+      - name: Use example secrets
+        run: cp firmware/Irrigation/secrets.example.h firmware/Irrigation/secrets.h
+
+      - name: Compile for ESP32-S3
+        run: |
+          arduino-cli compile \
+            -b "esp32:esp32:esp32s3:CDCOnBoot=cdc,PSRAM=disabled,PartitionScheme=default" \
+            firmware/Irrigation

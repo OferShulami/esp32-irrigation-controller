@@ -1,0 +1,17 @@
+# Real credentials - never commit
+firmware/**/secrets.h
+
+# Personal working notes
+notes/
+
+# Build output / tools
+build/
+.pio/
+*.bin
+*.elf
+.vscode/
+.idea/
+.claude/settings.local.json
+
+# macOS
+.DS_Store
